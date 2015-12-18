@@ -1,0 +1,21 @@
+Description: Fix buffer overflow for forward reference within backward assertion with excess closing parenthesis.
+ Strictly, this is a backport, but the patch is trivial.
+Origin: upstream http://vcs.pcre.org/pcre?view=revision&revision=1571
+Bug: https://bugs.exim.org/show_bug.cgi?id=1651
+Bug-Debian: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=790000
+Last-Update: 2015-06-26
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+Index: b/pcre_compile.c
+===================================================================
+--- a/pcre_compile.c	2015-05-26 08:24:55.000000000 +0100
++++ b/pcre_compile.c	2015-06-26 08:00:13.000000000 +0100
+@@ -9265,7 +9265,7 @@
+ exceptional ones forgo this. We scan the pattern to check that they are fixed
+ length, and set their lengths. */
+ 
+-if (cd->check_lookbehind)
++if (errorcode == 0 && cd->check_lookbehind)
+   {
+   pcre_uchar *cc = (pcre_uchar *)codestart;
+ 

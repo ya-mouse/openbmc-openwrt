@@ -1,0 +1,31 @@
+Description: Disable JIT on x32, needs explicit porting to ILP32 amd64, FPU-less PowerPC.
+Author: Thorsten Glaser <tg@mirbsd.org>, Roland Stigge <stigge@antcom.de>
+
+--- a/sljit/sljitConfigInternal.h
++++ b/sljit/sljitConfigInternal.h
+@@ -97,7 +97,11 @@
+ #if defined(__i386__) || defined(__i386)
+ #define SLJIT_CONFIG_X86_32 1
+ #elif defined(__x86_64__)
+-#define SLJIT_CONFIG_X86_64 1
++# if defined(__ILP32__)
++#  define SLJIT_CONFIG_UNSUPPORTED 1
++# else
++#  define SLJIT_CONFIG_X86_64 1
++# endif
+ #elif defined(__arm__) || defined(__ARM__)
+ #ifdef __thumb2__
+ #define SLJIT_CONFIG_ARM_THUMB2 1
+@@ -111,7 +115,11 @@
+ #elif defined(__ppc64__) || defined(__powerpc64__) || defined(_ARCH_PPC64) || (defined(_POWER) && defined(__64BIT__))
+ #define SLJIT_CONFIG_PPC_64 1
+ #elif defined(__ppc__) || defined(__powerpc__) || defined(_ARCH_PPC) || defined(_ARCH_PWR) || defined(_ARCH_PWR2) || defined(_POWER)
+-#define SLJIT_CONFIG_PPC_32 1
++# ifndef __NO_FPRS__
++#  define SLJIT_CONFIG_PPC_32 1
++# else
++#  define SLJIT_CONFIG_UNSUPPORTED 1
++# endif
+ #elif defined(__mips__) && !defined(_LP64)
+ #define SLJIT_CONFIG_MIPS_32 1
+ #elif defined(__mips64)

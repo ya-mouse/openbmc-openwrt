@@ -1,0 +1,14 @@
+diff --git a/configure.ac b/configure.ac
+index dce76b3..172de8b 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -540,6 +540,9 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
+ #if defined(__GNUC__) && (__GNUC__ < 3 || (__GNUC__ == 3 && __GNUC_MINOR__ < 4))
+ #error "Need GCC >= 3.4 for sane altivec support"
+ #endif
++#if defined(__PPC64__) && (__BYTE_ORDER__==__ORDER_LITTLE_ENDIAN__)
++#error VMX utilization is still not ready on ppc64el
++#endif
+ #include <altivec.h>
+ int main () {
+     vector unsigned int v = vec_splat_u32 (1);

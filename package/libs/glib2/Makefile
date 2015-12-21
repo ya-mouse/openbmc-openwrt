@@ -22,6 +22,8 @@ PKG_BUILD_PARALLEL:=1
 PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 
+PKG_MAINTAINER:=Anton D. Kachalov <mouse@yandex.ru>
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/libglib2
@@ -55,15 +57,18 @@ CONFIGURE_VARS += \
 	glib_cv_stack_grows=no \
 	glib_cv_uscore=no
 
-TARGET_CPPFLAGS:=-I. -I.. $(TARGET_CPPFLAGS)
-
 TARGET_CFLAGS += $(FPIC)
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/glib-2.0 $(1)/usr/include/
-	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib/glib-2.0/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib*.{a,so,so.*} $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/glib-2.0/include/*.h $(1)/usr/lib/glib-2.0/include/
+	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/*.pc $(1)/usr/lib/pkgconfig/
+	$(INSTALL_DIR) $(1)/usr/share/aclocal
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/aclocal/* $(1)/usr/share/aclocal/
 endef
 
 define Package/libglib2/install

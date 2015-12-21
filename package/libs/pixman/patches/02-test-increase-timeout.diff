@@ -1,0 +1,13 @@
+Index: pixman/test/alpha-loop.c
+===================================================================
+--- pixman.orig/test/alpha-loop.c	2013-07-26 14:26:43.905457549 +0200
++++ pixman/test/alpha-loop.c	2013-08-03 10:21:53.498601016 +0200
+@@ -21,7 +21,7 @@
+     pixman_image_t *d = pixman_image_create_bits (PIXMAN_a8r8g8b8, WIDTH, HEIGHT, dest, WIDTH * 4);
+     pixman_image_t *s = pixman_image_create_bits (PIXMAN_a2r10g10b10, WIDTH, HEIGHT, src, WIDTH * 4);
+ 
+-    fail_after (5, "Infinite loop detected: 5 seconds without progress\n");
++    fail_after (50, "Infinite loop detected: 50 seconds without progress\n");
+ 
+     pixman_image_set_alpha_map (s, a, 0, 0);
+     pixman_image_set_alpha_map (a, s, 0, 0);

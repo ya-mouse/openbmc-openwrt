@@ -13,6 +13,6 @@ define Profile/Default
 endef
 
 define Profile/Default/Description
-	Default package set compatible with most boards.
+	Default package set compatible with most SoC.
 endef
 $(eval $(call Profile,Default))

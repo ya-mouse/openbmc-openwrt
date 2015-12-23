@@ -8,12 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=glib
-PKG_VERSION:=2.46.2
+PKG_VERSION:=2.38.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
-PKG_SOURCE_URL:=@GNOME/$(PKG_NAME)/2.46
-PKG_MD5SUM:=7f815d6e46df68e070cb421ed7f1139e
+PKG_SOURCE_URL:=@GNOME/$(PKG_NAME)/2.38
+PKG_MD5SUM:=26d1d08e478fc48c181ca8be44f5b69f
+#7f815d6e46df68e070cb421ed7f1139e
 
 PKG_LICENSE:=GPL-3.0
 PKG_LICENSE_FILES:=COPYING
@@ -74,6 +75,7 @@ endef
 define Package/libglib2/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib*.{so,so.*} $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/charset.alias $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,libglib2))

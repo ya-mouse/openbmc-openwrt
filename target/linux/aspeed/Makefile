@@ -9,12 +9,12 @@ include $(TOPDIR)/rules.mk
 ARCH:=arm
 BOARD:=aspeed
 BOARDNAME:=Aspeed SoC
-SUBTARGETS:=ast2150
+SUBTARGETS:=ast2150 ast2400
 FEATURES:=squashfs gpio
 CPU_TYPE:=arm926ej-s
 MAINTAINER:=Anton D. Kachalov <mouse@yandex.ru>
 
-KERNEL_PATCHVER:=3.18
+KERNEL_PATCHVER:=2.6.28.9
 
 include $(INCLUDE_DIR)/target.mk
 DEFAULT_PACKAGES += \

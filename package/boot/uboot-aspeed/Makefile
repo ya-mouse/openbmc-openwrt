@@ -33,7 +33,11 @@ define uboot/ast2300
   TITLE:=U-Boot for ASPEED2300
 endef
 
-UBOOTS:=ast2300
+define uboot/ast2400
+  TITLE:=U-Boot for ASPEED2400
+endef
+
+UBOOTS:=ast2300 ast2400
 
 define Package/uboot/template
 define Package/uboot-$(1)

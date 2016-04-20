@@ -1,0 +1,81 @@
+--- a/include/linux/socket.h	2016-04-01 13:59:08.916000000 +0300
++++ b/include/linux/socket.h	2016-03-31 16:31:29.696000000 +0300
+@@ -16,8 +16,6 @@ struct __kernel_sockaddr_storage {
+ 				/* _SS_MAXSIZE value minus size of ss_family */
+ } __attribute__ ((aligned(_K_SS_ALIGNSIZE)));	/* force desired alignment */
+ 
+-#if defined(__KERNEL__) || !defined(__GLIBC__) || (__GLIBC__ < 2)
+-
+ #include <asm/socket.h>			/* arch-dependent defines	*/
+ #include <linux/sockios.h>		/* the SIOCxxx I/O controls	*/
+ #include <linux/uio.h>			/* iovec support		*/
+@@ -31,6 +29,8 @@ extern void socket_seq_show(struct seq_f
+ 
+ typedef unsigned short	sa_family_t;
+ 
++#if defined(__KERNEL__)
++
+ /*
+  *	1003.1g requires sa_family_t and that sa_data is char.
+  */
+--- a/include/linux/types.h	2016-04-01 13:59:08.980000000 +0300
++++ b/include/linux/types.h	2016-03-30 19:13:06.672000000 +0300
+@@ -1,10 +1,14 @@
+ #ifndef _LINUX_TYPES_H
+ #define _LINUX_TYPES_H
+ 
+-
+ #include <linux/posix_types.h>
+ #include <asm/types.h>
+ 
++#ifndef __KERNEL__
++#include <sys/types.h>
++typedef __u32 __kernel_dev_t;
++#else
++
+ #ifndef __KERNEL_STRICT_NAMES
+ 
+ typedef __u32 __kernel_dev_t;
+@@ -134,6 +138,8 @@ typedef unsigned long blkcnt_t;
+ 
+ #endif /* __KERNEL_STRICT_NAMES */
+ 
++#endif
++
+ /*
+  * Below are truly Linux-specific types that should never collide with
+  * any application/library that wants linux/types.h.
+@@ -161,5 +167,4 @@ typedef __u64 __bitwise __be64;
+ typedef __u16 __bitwise __sum16;
+ typedef __u32 __bitwise __wsum;
+ 
+-
+ #endif /* _LINUX_TYPES_H */
+--- a/include/linux/uio.h	2016-04-01 13:59:08.992000000 +0300
++++ b/include/linux/uio.h	2016-03-30 20:05:52.660000000 +0300
+@@ -1,7 +1,7 @@
+ #ifndef __LINUX_UIO_H
+ #define __LINUX_UIO_H
+ 
+-
++#ifdef __KERNEL__
+ #include <linux/types.h>
+ 
+ /*
+@@ -47,3 +47,5 @@ static inline size_t iov_length(const st
+ unsigned long iov_shorten(struct iovec *iov, unsigned long nr_segs, size_t to);
+ 
+ #endif
++
++#endif
+--- a/include/linux/un.h	2016-04-01 13:59:08.992000000 +0300
++++ b/include/linux/un.h	2016-03-31 16:33:58.148000000 +0300
+@@ -3,6 +3,8 @@
+ 
+ #define UNIX_PATH_MAX	108
+ 
++#include <linux/socket.h>
++
+ struct sockaddr_un {
+ 	sa_family_t sun_family;	/* AF_UNIX */
+ 	char sun_path[UNIX_PATH_MAX];	/* pathname */

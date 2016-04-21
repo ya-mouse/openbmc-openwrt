@@ -1,0 +1,74 @@
+diff -Naurp netifd-2015-12-02.orig/config.c netifd-2015-12-02/config.c
+--- netifd-2015-12-02.orig/config.c	2016-03-30 20:07:44.000000000 +0300
++++ netifd-2015-12-02/config.c	2016-04-21 15:01:15.688000000 +0300
+@@ -176,8 +176,10 @@ config_init_devices(void)
+ 				devtype = &vlandev_device_type;
+ 			else if (!strcmp(type, "bridge"))
+ 				devtype = &bridge_device_type;
++#if defined(macvlan_device_type)
+ 			else if (!strcmp(type, "macvlan"))
+ 				devtype = &macvlan_device_type;
++#endif
+ 			else if (!strcmp(type, "tunnel"))
+ 				devtype = &tunnel_device_type;
+ 		}
+diff -Naurp netifd-2015-12-02.orig/macvlan.c netifd-2015-12-02/macvlan.c
+--- netifd-2015-12-02.orig/macvlan.c	2016-03-30 20:07:44.000000000 +0300
++++ netifd-2015-12-02/macvlan.c	2016-04-21 15:00:53.528000000 +0300
+@@ -28,6 +28,7 @@
+ #include "interface.h"
+ #include "system.h"
+ 
++#if defined(MACVLAN_MODE_PRIVATE)
+ enum {
+ 	MACVLAN_ATTR_IFNAME,
+ 	MACVLAN_ATTR_MACADDR,
+@@ -261,3 +262,4 @@ const struct device_type macvlan_device_
+ 	.free = macvlan_free,
+ 	.dump_info = macvlan_dump_info,
+ };
++#endif
+diff -Naurp netifd-2015-12-02.orig/system-linux.c netifd-2015-12-02/system-linux.c
+--- netifd-2015-12-02.orig/system-linux.c	2016-03-30 20:07:44.000000000 +0300
++++ netifd-2015-12-02/system-linux.c	2016-04-21 15:00:33.456000000 +0300
+@@ -888,6 +888,7 @@ int system_bridge_addbr(struct device *b
+ 	return 0;
+ }
+ 
++#if defined(MACVLAN_MODE_PRIVATE)
+ int system_macvlan_add(struct device *macvlan, struct device *dev, struct macvlan_config *cfg)
+ {
+ 	struct nl_msg *msg;
+@@ -947,6 +948,7 @@ nla_put_failure:
+ 	nlmsg_free(msg);
+ 	return -ENOMEM;
+ }
++#endif
+ 
+ static int system_link_del(const char *ifname)
+ {
+@@ -966,10 +968,12 @@ static int system_link_del(const char *i
+ 	return system_rtnl_call(msg);
+ }
+ 
++#if defined(MACVLAN_MODE_PRIVATE)
+ int system_macvlan_del(struct device *macvlan)
+ {
+ 	return system_link_del(macvlan->ifname);
+ }
++#endif
+ 
+ static int system_vlan(struct device *dev, int id)
+ {
+@@ -1831,9 +1835,10 @@ static int system_iprule(struct iprule *
+ 	if (rule->flags & IPRULE_IN)
+ 		nla_put(msg, FRA_IFNAME, strlen(rule->in_dev) + 1, rule->in_dev);
+ 
++#if defined(FRA_OIFNAME)
+ 	if (rule->flags & IPRULE_OUT)
+ 		nla_put(msg, FRA_OIFNAME, strlen(rule->out_dev) + 1, rule->out_dev);
+-
++#endif
+ 	if (rule->flags & IPRULE_SRC)
+ 		nla_put(msg, FRA_SRC, alen, &rule->src_addr);
+ 

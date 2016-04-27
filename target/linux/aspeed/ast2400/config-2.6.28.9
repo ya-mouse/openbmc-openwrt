@@ -1,7 +1,7 @@
 #
 # Automatically generated make config: don't edit
 # Linux kernel version: 2.6.28.9
-# Tue Dec 22 14:04:19 2015
+# Wed Apr 27 17:50:39 2016
 #
 CONFIG_ARM=y
 CONFIG_SYS_SUPPORTS_APM_EMULATION=y
@@ -482,9 +482,26 @@ CONFIG_MTD_CFI_I2=y
 # CONFIG_MTD_ABSENT is not set
 
 #
+# SPI Flash chip drivers
+#
+CONFIG_MTD_SPI=y
+# CONFIG_MTD_SPI_SPANSION is not set
+CONFIG_MTD_SPI_MACRONIX=y
+# CONFIG_MTD_SPI_INTEL_S33 is not set
+# CONFIG_MTD_SPI_WINBOND is not set
+# CONFIG_MTD_SPI_AT is not set
+# CONFIG_MTD_SPI_ST is not set
+# CONFIG_MTD_SPI_NUMONYX is not set
+# CONFIG_MTD_SPI_DEFAULT is not set
+
+#
 # Mapping drivers for chip access
 #
 # CONFIG_MTD_COMPLEX_MAPPINGS is not set
+CONFIG_MTD_PHYSMAP=y
+CONFIG_MTD_PHYSMAP_START=0x20000000
+CONFIG_MTD_PHYSMAP_LEN=0x2000000
+CONFIG_MTD_PHYSMAP_BANKWIDTH=2
 # CONFIG_MTD_PLATRAM is not set
 
 #
